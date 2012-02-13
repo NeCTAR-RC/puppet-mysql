@@ -16,7 +16,7 @@ class mysql {
     require => Service["mysql"],
   }
 
-  define mysqldb( $user, $password ) {
+  define mysqldb( $user, $password, $access='localhost' ) {
     exec { "create-${name}-db":
       command => "mysql -u root -p${mysql_root_password} -e \"CREATE DATABASE ${name};\"",
       creates => "/var/lib/mysql/${name}/",
@@ -25,7 +25,7 @@ class mysql {
     }
 
     exec { "create-mysql-${name}-user":
-      command => "mysql -u root -p${mysql_root_password} -e \"CREATE USER '${user}'@'localhost' IDENTIFIED BY '${password}'; GRANT ALL PRIVILEGES ON ${name}.* TO '${user}'@'localhost';\"",
+      command => "mysql -u root -p${mysql_root_password} -e \"CREATE USER '${user}'@'${access}' IDENTIFIED BY '${password}'; GRANT ALL PRIVILEGES ON ${name}.* TO '${user}'@'${access}';\"",
       path    => "/bin:/usr/bin",
       unless  => "mysql -u${user} -p${password} ${name}",
       require => Service["mysql"],
