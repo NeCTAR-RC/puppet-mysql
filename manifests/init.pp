@@ -16,6 +16,18 @@ class mysql {
     require => Service["mysql"],
   }
 
+  if $lsbdistcodename == 'precise' {  
+	file { '/etc/mysql/my.cnf':
+      ensure  => present,
+      owner   => root,
+      group   => root,
+      mode    => '0644',
+      content => template('mysql/my.cnf.erb'),
+      notify  => Service['mysql'],
+      require => Package['mysql-server'],
+    }
+  }
+  
   define mysqldb( $user, $password, $access='localhost' ) {
     exec { "create-${name}-db":
       command => "mysql -u root -p${mysql_root_password} -e \"CREATE DATABASE ${name};\"",
@@ -25,11 +37,21 @@ class mysql {
     }
 
     exec { "create-mysql-${name}-user":
-      command => "mysql -u root -p${mysql_root_password} -e \"CREATE USER '${user}'@'${access}' IDENTIFIED BY '${password}'; GRANT ALL PRIVILEGES ON ${name}.* TO '${user}'@'${access}';\"",
+      command => "mysql -u root -p${mysql_root_password} -e \"CREATE USER '${user}'@'localhost' IDENTIFIED BY '${password}'; GRANT ALL PRIVILEGES ON ${name}.* TO '${user}'@'localhost';\"",
       path    => "/bin:/usr/bin",
       unless  => "mysql -u${user} -p${password} ${name}",
       require => Service["mysql"],
     }
+    if $access == 'localhost' {
+      
+    }
+    else {
+      exec { "create-mysql-${name}-user-remote":
+        command => "mysql -u root -p${mysql_root_password} -e \"CREATE USER '${user}'@'${access}' IDENTIFIED BY '${password}'; GRANT ALL PRIVILEGES ON ${name}.* TO '${user}'@'${access}';\"",
+        path    => "/bin:/usr/bin",
+        unless  => "mysql -u${user} -p${password} -h ${ipaddress} ${name}",
+        require => Service["mysql"],
+      }
+    }
   }
-  
 }
