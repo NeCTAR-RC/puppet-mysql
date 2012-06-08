@@ -1,4 +1,4 @@
-class mysql::master {
+class mysql::master inherits mysql {
 
   file { '/etc/mysql/conf.d/replication.cnf':
     ensure  => present,

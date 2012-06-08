@@ -1,4 +1,4 @@
-class mysql::slave {
+class mysql::slave inherits mysql {
 
   file { '/etc/mysql/conf.d/replication.cnf':
     ensure  => present,
