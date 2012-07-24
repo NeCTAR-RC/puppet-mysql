@@ -56,12 +56,16 @@ thread_cache_size       = 16
 # the first time they are touched
 myisam-recover         = BACKUP
 max_connections        = 1024
+
+tmp_table_size       = 32M
+max_heap_table_size  = 32M
+
 #table_cache            = 64
 #thread_concurrency     = 10
 #
 # * Query Cache Configuration
 #
-query_cache_limit	= 1M
+query_cache_limit	= 2M
 query_cache_size        = 16M
 #
 # * Logging and Replication
@@ -94,6 +98,9 @@ max_binlog_size         = 100M
 # InnoDB is enabled by default with a 10MB datafile in /var/lib/mysql/.
 # Read the manual for more InnoDB related options. There are many!
 #
+
+innodb_buffer_pool_size = 1024M
+
 # * Security Features
 #
 # Read the manual, too, if you want chroot!
