@@ -1,5 +1,5 @@
 class mysql {
-  
+
   package { 'mysql-server':
     ensure => installed,
   }
@@ -11,9 +11,9 @@ class mysql {
 
   exec { 'set-mysql-root-password':
     unless => "mysqladmin -uroot -p${mysql_root_password} status",
-    path => ["/bin", "/usr/bin"],
+    path => ['/bin', '/usr/bin'],
     command => "mysqladmin -uroot password ${mysql_root_password}",
-    require => Service["mysql"],
+    require => Service['mysql'],
   }
 
   file { '/etc/mysql/my.cnf':
@@ -41,7 +41,7 @@ class mysql {
       require => Service["mysql"],
     }
     if $access == 'localhost' {
-      
+
     }
     else {
       exec { "create-mysql-${name}-user-remote":
