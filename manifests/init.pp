@@ -3,7 +3,7 @@ class mysql {
   package { 'mysql-server':
     ensure => installed,
   }
-  
+
   service { 'mysql':
     ensure  => running,
     require => Package[mysql-server],
@@ -25,7 +25,12 @@ class mysql {
     notify  => Service['mysql'],
     require => Package['mysql-server'],
   }
-  
+
+  nagios::nrpe::service {
+    'check_mysqld':
+      check_command  => '/usr/lib/nagios/plugins/check_mysql',
+    }
+
   define mysqldb( $user, $password, $access='localhost' ) {
     exec { "create-${name}-db":
       command => "mysql -u root -p${mysql_root_password} -e \"CREATE DATABASE ${name};\"",
