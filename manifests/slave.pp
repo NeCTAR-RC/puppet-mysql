@@ -9,5 +9,5 @@ class mysql::slave inherits mysql {
     notify  => Service['mysql'],
     require => Package['mysql-server'],
   }
-  
+
 }
