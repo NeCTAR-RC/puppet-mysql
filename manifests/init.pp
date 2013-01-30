@@ -29,6 +29,7 @@ class mysql {
   nagios::nrpe::service {
     'check_mysqld':
       check_command  => '/usr/lib/nagios/plugins/check_mysql',
+      servicegroups  => 'databases';
     }
 
   define mysqldb( $user, $password, $access='localhost' ) {
