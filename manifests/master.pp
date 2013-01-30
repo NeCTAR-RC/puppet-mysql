@@ -16,5 +16,4 @@ class mysql::master inherits mysql {
     unless  => "mysql -u${mysql_replication_user} -p${mysql_replication_password} -h ${ipaddress}",
     require => Service['mysql'],
   }
-
 }
