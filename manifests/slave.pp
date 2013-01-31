@@ -11,7 +11,7 @@ class mysql::slave inherits mysql {
   }
 
   nagios::nrpe::service {
-    'check_mysqld':
+    'check_mysqld_slave':
       servicegroups => 'databases',
       check_command  => '/usr/lib/nagios/plugins/check_mysql -S',
     }
