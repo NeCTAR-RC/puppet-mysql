@@ -30,6 +30,7 @@ class mysql {
     ensure  => present,
     owner   => root,
     group   => root,
+	mode	=> 0750,
 	source  => 'puppet:///modules/mysql/backup-mysql.sh'
   }
 
