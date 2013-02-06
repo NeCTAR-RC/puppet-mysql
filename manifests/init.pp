@@ -26,6 +26,21 @@ class mysql {
     require => Package['mysql-server'],
   }
 
+  file { '/usr/local/sbin/backup-mysql.sh':
+    ensure  => present,
+    owner   => root,
+    group   => root,
+	source  => 'puppet:///modules/mysql/backup-mysql.sh'
+  }
+
+  cron { backup-mysql:
+    command => '/usr/local/sbin/backup-mysql.sh',
+    user    => root,
+    hour    => '4',
+    minute  => '0',
+	require => File['/usr/local/sbin/backup-mysql.sh'],
+  }
+
   nagios::nrpe::service {
     'check_mysqld':
       check_command  => '/usr/lib/nagios/plugins/check_mysql',
