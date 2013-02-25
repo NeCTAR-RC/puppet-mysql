@@ -56,7 +56,7 @@ class mysql {
       require => Service["mysql"],
     }
 
-    mysql::user { "${user}":
+    mysql::user { $user:
       user     => $user,
       password => $password,
       database => $name,
