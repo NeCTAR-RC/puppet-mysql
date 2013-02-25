@@ -15,7 +15,7 @@ define mysql::user (
   }
 
   exec { "create-mysql-${name}-user":
-    command => "mysql -u root -p${mysql_root_password} -e \"GRANT ${mysql_grant} ON ${database}.* TO '${user}'@'localhost' IDENTIFIED BY '${password}' WITH GRANT OPTION;\"",
+    command => "mysql -u root -p${mysql_root_password} -e \"GRANT ${mysql_grant} ON ${database}.* TO '${user}'@'localhost' IDENTIFIED BY '${password}';\"",
     path    => '/bin:/usr/bin',
     unless  => "mysql -u${user} -p${password} -eexit",
     require => Service['mysql'],
@@ -23,7 +23,7 @@ define mysql::user (
 
   if $access != 'localhost' {
     exec { "create-mysql-${name}-user-remote":
-      command => "mysql -u root -p${mysql_root_password} -e \"GRANT ${mysql_grant} ON ${database}.* TO '${user}'@'${access}' IDENTIFIED BY '${password}' WITH GRANT OPTION;\"",
+      command => "mysql -u root -p${mysql_root_password} -e \"GRANT ${mysql_grant} ON ${database}.* TO '${user}'@'${access}' IDENTIFIED BY '${password}';\"",
       path    => '/bin:/usr/bin',
       unless  => "mysql -u${user} -p${password} -h ${ipaddress} -eexit",
       require => Service['mysql'],
