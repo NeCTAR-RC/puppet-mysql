@@ -1,4 +1,4 @@
-class mysql {
+class mysql($local_backup=false) {
 
   package { 'mysql-server':
     ensure => installed,
@@ -26,20 +26,27 @@ class mysql {
     require => Package['mysql-server'],
   }
 
+  if $local_backup {
+    $backup_ensure = present
+  } else {
+    $backup_ensure = absent
+  }
+  
   file { '/usr/local/sbin/backup-mysql.sh':
-    ensure  => present,
+    ensure  => $backup_ensure,
     owner   => root,
     group   => root,
-	mode	=> 0750,
-	source  => 'puppet:///modules/mysql/backup-mysql.sh'
+    mode    => 0750,
+    source  => 'puppet:///modules/mysql/backup-mysql.sh'
   }
 
   cron { backup-mysql:
+    ensure  => $backup_ensure,
     command => '/usr/local/sbin/backup-mysql.sh',
     user    => root,
     hour    => '4',
     minute  => '0',
-	require => File['/usr/local/sbin/backup-mysql.sh'],
+    require => File['/usr/local/sbin/backup-mysql.sh'],
   }
 
   nagios::nrpe::service {
