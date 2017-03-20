@@ -36,7 +36,7 @@ class mysql($local_backup=false) {
     ensure  => $backup_ensure,
     owner   => root,
     group   => root,
-    mode    => 0750,
+    mode    => '0750',
     source  => 'puppet:///modules/mysql/backup-mysql.sh'
   }
 
