@@ -33,11 +33,11 @@ class mysql($local_backup=false) {
   }
   
   file { '/usr/local/sbin/backup-mysql.sh':
-    ensure  => $backup_ensure,
-    owner   => root,
-    group   => root,
-    mode    => 0750,
-    source  => 'puppet:///modules/mysql/backup-mysql.sh'
+    ensure => $backup_ensure,
+    owner  => root,
+    group  => root,
+    mode   => '0750',
+    source => 'puppet:///modules/mysql/backup-mysql.sh'
   }
 
   cron { backup-mysql:
