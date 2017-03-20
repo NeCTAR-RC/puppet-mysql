@@ -36,7 +36,7 @@ class mysql($local_backup=false) {
     ensure  => $backup_ensure,
     owner   => root,
     group   => root,
-    mode    => 0750,
+    mode    => '0750',
     source  => 'puppet:///modules/mysql/backup-mysql.sh'
   }
 
@@ -60,7 +60,7 @@ class mysql($local_backup=false) {
       command => "mysql -u root -p${mysql_root_password} -e \"CREATE DATABASE ${name};\"",
       creates => "/var/lib/mysql/${name}/",
       path    => "/bin:/usr/bin",
-      require => Service["mysql"],
+      #require => Service["mysql"],
     }
 
     mysql::user { $user:
